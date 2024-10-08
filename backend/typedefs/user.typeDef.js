@@ -3,13 +3,13 @@ const userTypeDef = `#graphql
     _id: ID!
     username: String!
     name: String!
+    email: String!
     password: String!
     profilePicture: String
     gender: String!
    }
 
    type Query{
-    users:[User!]
     authUser: User
     user(userId:ID!):User
    }
@@ -22,6 +22,7 @@ const userTypeDef = `#graphql
    input SignUpInput{
       username: String!
       name: String!
+      email: String!
       password: String!
       gender: String!
    }   

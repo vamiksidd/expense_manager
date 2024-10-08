@@ -2,6 +2,7 @@ const transactionTypeDef = `#graphql
    type Transaction {
     _id: ID!
     userId: ID!
+    email: String!
     description: String!
     paymentType: String!
     category: String!
