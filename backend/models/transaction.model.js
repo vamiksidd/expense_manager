@@ -31,10 +31,10 @@ const transactionSchema = new mongoose.Schema(
         },
         date: {
             type: Date,
-            required: True,
+            required: true,
         },
     },
 );
 
-const Transaction = mongoose.model("Transation", transactionSchema);
+const Transaction = mongoose.model("Transaction", transactionSchema);
 export default Transaction 
