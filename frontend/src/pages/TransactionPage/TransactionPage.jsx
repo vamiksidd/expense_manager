@@ -1,10 +1,12 @@
 import { useState } from "react";
 
+import TransactionFormSkeleton from "../../components/skeletons/TransactionFormSkeleton";
+
 const TransactionPage = () => {
   const [formData, setFormData] = useState({
     description: "",
-    paymentType: "",
-    category: "",
+    paymentType: "Cash",
+    category: "Saving",
     amount: "",
     location: "",
     date: "",
@@ -22,7 +24,7 @@ const TransactionPage = () => {
     }));
   };
 
-  // if (loading) return <TransactionFormSkeleton />;
+//  if(loading) return <TransactionFormSkeleton />;
 
   return (
     <div className="h-screen max-w-4xl mx-auto flex flex-col items-center">
@@ -174,6 +176,7 @@ const TransactionPage = () => {
               placeholder="Select date"
               value={formData.date}
               onChange={handleInputChange}
+              required
             />
           </div>
         </div>

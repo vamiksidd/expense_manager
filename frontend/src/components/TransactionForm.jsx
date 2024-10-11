@@ -150,6 +150,7 @@ const TransactionForm = () => {
             className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-[11px] px-4 mb-3 leading-tight focus:outline-none
 						 focus:bg-white"
             placeholder="Select date"
+            required
           />
         </div>
       </div>

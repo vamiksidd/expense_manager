@@ -2,7 +2,7 @@
 import { HomePage, LoginPage, NotFound, SignUpPage, TransactionPage } from "./pages";
 import { Route, Routes } from "react-router-dom";
 import { LampContainer } from './components/ui/Lamp.jsx'
-import { Header } from "./components/index.js"
+
 
 function App() {
 	const authUser = true;
@@ -11,7 +11,7 @@ function App() {
 
 
 			<LampContainer>
-				{authUser && <Header />}
+
 				<Routes>
 					<Route path='/' element={<HomePage />} />
 					<Route path='/login' element={<LoginPage />} />
