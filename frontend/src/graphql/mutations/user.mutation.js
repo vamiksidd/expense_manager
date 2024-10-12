@@ -7,7 +7,7 @@ export const SIGN_UP = gql`
 			_id
 			name
 			username
-            email
+      email
 		}
 	}
 `;

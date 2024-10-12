@@ -31,7 +31,6 @@ const transactionSchema = new mongoose.Schema(
         },
         date: {
             type: Date,
-            required: true,
         },
     },
 );

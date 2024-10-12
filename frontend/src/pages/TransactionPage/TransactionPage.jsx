@@ -1,8 +1,11 @@
 import { useState } from "react";
 
 import TransactionFormSkeleton from "../../components/skeletons/TransactionFormSkeleton";
+import { useMutation } from "@apollo/client";
+import { UPDATE_TRANSACTION } from "../../graphql/mutations/transaction.mutation";
 
 const TransactionPage = () => {
+ 
   const [formData, setFormData] = useState({
     description: "",
     paymentType: "Cash",
@@ -24,7 +27,7 @@ const TransactionPage = () => {
     }));
   };
 
-//  if(loading) return <TransactionFormSkeleton />;
+ if(loading) return <TransactionFormSkeleton />;
 
   return (
     <div className="h-screen mt-10 max-w-4xl mx-auto flex flex-col items-center">

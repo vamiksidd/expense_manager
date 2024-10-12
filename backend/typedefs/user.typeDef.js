@@ -13,6 +13,7 @@ const userTypeDef = `#graphql
     authUser: User
     user(userId:ID!):User
    }
+
    type Mutation{
     signUp(input:SignUpInput!): User
     login(input:LoginInput!): User
@@ -26,6 +27,7 @@ const userTypeDef = `#graphql
       password: String!
       gender: String!
    }   
+   
    input LoginInput{
       username: String!
       password: String!
