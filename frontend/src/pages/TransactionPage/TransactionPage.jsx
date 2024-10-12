@@ -182,8 +182,8 @@ const TransactionPage = () => {
         </div>
         {/* SUBMIT BUTTON */}
         <button
-          className=" font-bold w-full rounded px-4 py-2 bg-gradient-to-br
-         text-slate-800 bg-[#16c6e3] hover:bg-[#2bb3c5]"
+          className="font-bold w-full rounded px-4 py-2 
+         text-white bg-cyan-500"
           type="submit"
         >
           Update Transaction

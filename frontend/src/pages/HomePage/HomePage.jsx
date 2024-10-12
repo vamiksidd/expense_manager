@@ -84,7 +84,7 @@ const HomePage = () => {
           />
           {!loading && (
             <MdLogout
-              className="mx-2 w-5 h-5 cursor-pointer"
+              className="mx-2 w-5 h-5 text-white cursor-pointer"
               onClick={handleLogout}
             />
           )}
