@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import InputField from "../../components/InputField";
-
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../../graphql/mutations/user.mutation";
 const LoginPage = () => {
+ 
   const [loginData, setLoginData] = useState({
     username: "",
-    email:"",
     password: "",
   });
-
+  const [login, { loading }] = useMutation(LOGIN,{
+    refetchQueries:["GetAuthUsers"]
+  })
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prevData) => ({
@@ -17,9 +20,13 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(loginData);
+    await login({
+      variables: {
+        input: loginData
+      }
+    })
   };
 
   return (
@@ -40,9 +47,9 @@ const LoginPage = () => {
                 name="username"
                 value={loginData.username}
                 onChange={handleChange}
-                
-              /> 
-          
+
+              />
+
               <InputField
                 label="Password"
                 id="password"

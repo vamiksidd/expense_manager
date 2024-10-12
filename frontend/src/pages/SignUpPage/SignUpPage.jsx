@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import RadioButton from "../../components/RadioButton";
 import InputField from "../../components/InputField";
 import { useMutation } from "@apollo/client";
@@ -14,8 +14,10 @@ const SignUpPage = () => {
     gender: "",
   });
 
-  const [signUp, { loading, error }] = useMutation(SIGN_UP)
-  const navigate = useNavigate()
+  const [signUp, { loading, error }] = useMutation(SIGN_UP,{
+    refetchQueries:["GetAuthUsers"]
+  })
+
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -36,12 +38,12 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const tmp = await signUp({
+      await signUp({
         variables: {
           input: signUpData,
         }
       })
-      navigate("/")
+   
 
     } catch (error) {
       console.error("Error in singup :", error);
