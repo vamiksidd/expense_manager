@@ -5,6 +5,7 @@ import Cards from "../../components/Cards";
 import TransactionForm from "../../components/TransactionForm";
 import { MdLogout } from "react-icons/md";
 
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
@@ -15,17 +16,16 @@ const HomePage = () => {
         label: "%",
         data: [6, 8, 3],
         backgroundColor: [
-          "rgba(22, 197, 226, 1)",
-          "rgba(236, 100, 75)",
-          "rgba(30, 30, 30, 1)",
+          "rgba(154, 233, 212, 0.99)",
+          "rgba(226, 65, 65, 1)",
+          "rgba(255, 255, 255)",
         ],
         borderColor: [
           "rgba(75, 192, 192)",
           "rgba(255, 99, 132)",
-          "rgba(54, 162, 235, 1)",
+          "rgba(160, 158, 192, 0.8)",
         ],
-        borderWidth: 1,
-        borderRadius: 30,
+        
         spacing: 10,
         cutout: 130,
       },
@@ -57,9 +57,11 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center">
+
+
+      <div className="flex mt-10 flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center">
         <div className="flex items-center translate-x-6">
-          <p className="md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-cyan-300 via-white to-cyan-300 inline-block text-transparent bg-clip-text backdrop-blur-md rounded-full">
+          <p className="md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-white to-red-800  inline-block text-transparent bg-clip-text backdrop-blur-sm rounded-full">
             Spend wisely, Track wisely
           </p>
 
@@ -88,6 +90,8 @@ const HomePage = () => {
         </div>
         <Cards />
       </div>
+
+
     </>
   );
 };

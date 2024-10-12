@@ -156,7 +156,8 @@ const TransactionForm = () => {
       </div>
       {/* SUBMIT BUTTON */}
       <button
-        className="font-bold w-full rounded px-4 text-slate-800 py-2  bg-[#16c6e3] hover:bg-[#2bb3c5]
+        className="font-bold w-full rounded px-4  py-2  
+        bg-[#e24141] hover:bg-[#b91e1e] text-white
 						disabled:opacity-70 disabled:cursor-not-allowed"
         type="submit"
       >

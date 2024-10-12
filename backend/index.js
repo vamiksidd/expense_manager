@@ -18,13 +18,13 @@ import { buildContext } from "graphql-passport";
 import mergedResolvers from "./resolvers/mergedResolvers.js";
 import mergedTypeDefs from "./typedefs/mergedTypeDefs.js";
 import connectDB from "./db/connectDB.js";
-import congfigurePassport from "./passport/passport.config.js";
+import { configurePassport } from "./passport/passport.config.js"
 //
 const app = express();
 const httpServer = http.createServer(app);
+configurePassport()
 
 const MongoDBStore = connectMongodbSession(session);
-
 ///
 
 const store = new MongoDBStore({
@@ -65,17 +65,17 @@ const server = new ApolloServer({
 await server.start();
 
 app.use(
-	"/graphql",
-	cors({
-		origin: "http://localhost:3000",
-		credentials: true,
-	}),
-	express.json(),
-	// expressMiddleware accepts the same arguments:
-	// an Apollo Server instance and optional configuration options
-	expressMiddleware(server, {
-		context: async ({ req, res }) => buildContext({ req, res }),
-	})
+  "/graphql",
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+  express.json(),
+  // expressMiddleware accepts the same arguments:
+  // an Apollo Server instance and optional configuration options
+  expressMiddleware(server, {
+    context: async ({ req, res }) => buildContext({ req, res }),
+  })
 );
 
 
