@@ -19,7 +19,9 @@ import mergedResolvers from "./resolvers/mergedResolvers.js";
 import mergedTypeDefs from "./typedefs/mergedTypeDefs.js";
 import connectDB from "./db/connectDB.js";
 import { configurePassport } from "./passport/passport.config.js"
+import path from "path";
 //
+const __dirname = path.resolve();
 const app = express();
 const httpServer = http.createServer(app);
 configurePassport()
@@ -78,6 +80,15 @@ app.use(
   })
 );
 
+
+
+///
+//FOR DEPLOYMENT
+app.use(express.static(path.join(__dirname, "frontend/dist")));
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
+});
+///
 
 await new Promise((res) => httpServer.listen({ port: process.env.PORT }, res));
 await connectDB();
