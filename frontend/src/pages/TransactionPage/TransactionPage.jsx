@@ -30,7 +30,7 @@ const TransactionPage = () => {
 
 
   const [updateTransaction,{loading}] = useMutation(UPDATE_TRANSACTION,{
-    refetchQueries:["GetTransactionsStatistics"]
+    refetchQueries:[{query:"GetTransactionsStatistics"}]
   })
 
 
