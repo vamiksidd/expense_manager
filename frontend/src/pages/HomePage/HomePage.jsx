@@ -1,109 +1,135 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useMutation } from "@apollo/client";
 
-import Cards from "../../components/Cards";
-import TransactionForm from "../../components/TransactionForm";
+
+import { Cards, TransactionForm } from "../../components";
 import { MdLogout } from "react-icons/md";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
+import { useMutation, useQuery } from "@apollo/client";
+
+import { useEffect, useState } from "react";
+import { GET_TRANSACTION_STATISTICS } from "../../graphql/queries/transaction.query";
+import { GET_AUTH_USERS } from "../../graphql/queries/user.query";
 import { LOGOUT } from "../../graphql/mutations/user.mutation";
+
+// const chartData = {
+// 	labels: ["Saving", "Expense", "Investment"],
+// 	datasets: [
+// 		{
+// 			label: "%",
+// 			data: [13, 8, 3],
+// 			backgroundColor: ["rgba(75, 192, 192)", "rgba(255, 99, 132)", "rgba(54, 162, 235)"],
+// 			borderColor: ["rgba(75, 192, 192)", "rgba(255, 99, 132)", "rgba(54, 162, 235, 1)"],
+// 			borderWidth: 1,
+// 			borderRadius: 30,
+// 			spacing: 10,
+// 			cutout: 130,
+// 		},
+// 	],
+// };
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
-  const chartData = {
-    labels: ["Saving", "Expense", "Investment"],
+  const { data } = useQuery(GET_TRANSACTION_STATISTICS);
+  const { data: authUserData } = useQuery(GET_AUTH_USERS);
+  // console.log(authUserData);
+  
+
+  const [logout, { loading, client }] = useMutation(LOGOUT, {
+    refetchQueries: ["GetAuthUser"],
+  });
+
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "%",
-        data: [6, 8, 3],
-        backgroundColor: [
-          "rgba(154, 233, 212, 0.99)",
-          "rgba(226, 65, 65, 1)",
-          "rgba(255, 255, 255)",
-        ],
-        borderColor: [
-          "rgba(75, 192, 192)",
-          "rgba(255, 99, 132)",
-          "rgba(160, 158, 192, 0.8)",
-        ],
-
+        label: "$",
+        data: [],
+        backgroundColor: [],
+        borderColor: [],
+        borderWidth: 1,
+        borderRadius: 30,
         spacing: 10,
         cutout: 130,
       },
     ],
-  };
+  });
 
-  const chartOptions = {
-    plugins: {
-      legend: {
-        labels: {
-          color: "white", // Change this to your desired font color
-        },
-      },
-    },
-    // Optional: You can set the font color for tooltips as well
-    elements: {
-      tooltip: {
-        bodyColor: "white", // Tooltip text color
-        titleColor: "white", // Tooltip title color
-      },
-    },
-  };
+  useEffect(() => {
+    if (data?.categoryStatistics) {
+      const categories = data.categoryStatistics.map((stat) => stat.category);
+      const totalAmounts = data.categoryStatistics.map((stat) => stat.totalAmount);
 
+      const backgroundColors = [];
+      const borderColors = [];
 
-  const [logout, { loading }] = useMutation(LOGOUT,{
-    refetchQueries:["GetAuthUsers"]
-  })
+      categories.forEach((category) => {
+        if (category === "saving") {
+          backgroundColors.push("rgba(75, 192, 192)");
+          borderColors.push("rgba(75, 192, 192)");
+        } else if (category === "expense") {
+          backgroundColors.push("rgba(255, 99, 132)");
+          borderColors.push("rgba(255, 99, 132)");
+        } else if (category === "investment") {
+          backgroundColors.push("rgba(54, 162, 235)");
+          borderColors.push("rgba(54, 162, 235)");
+        }
+      });
+
+      setChartData((prev) => ({
+        labels: categories,
+        datasets: [
+          {
+            ...prev.datasets[0],
+            data: totalAmounts,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+          },
+        ],
+      }));
+    }
+  }, [data]);
+
   const handleLogout = async () => {
     try {
-      const tmp = await logout()
-
+      await logout();
+      // Clear the Apollo Client cache FROM THE DOCS
+      // https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
+      client.resetStore();
     } catch (error) {
-      console.log("errorin logging out:", error);
+      console.error("Error logging out:", error);
       toast.error(error.message);
     }
   };
 
-
-
   return (
     <>
-
-
-      <div className="flex mt-10 flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center">
-        <div className="flex items-center translate-x-6">
-          <p className="md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-white to-red-800  inline-block text-transparent bg-clip-text backdrop-blur-sm rounded-full">
-            Spend wisely, Track wisely
+      <div className='flex flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center'>
+        <div className='flex items-center'>
+          <p className='md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-pink-600 via-indigo-500 to-pink-400 inline-block text-transparent bg-clip-text'>
+            Spend wisely, track wisely
           </p>
-
           <img
-            src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
-            className="w-11 h-11 rounded-full border cursor-pointer"
-            alt="Avatar"
+            src={authUserData?.authUser?.profilePicture}
+            className='w-11 h-11 rounded-full border cursor-pointer'
+            alt='Avatar'
           />
-          {!loading && (
-            <MdLogout
-              className="mx-2 w-5 h-5 text-white cursor-pointer"
-              onClick={handleLogout}
-            />
-          )}
+          {!loading && <MdLogout className='mx-2 w-5 h-5 cursor-pointer text-white' onClick={handleLogout}  />}
           {/* loading spinner */}
-          {loading && (
-            <div className="w-6 h-6 border-t-2 border-b-2 mx-2 rounded-full animate-spin"></div>
-          )}
+          {loading && <div className='w-6 h-6 border-t-2 border-b-2 mx-2 rounded-full animate-spin'></div>}
         </div>
-        <div className="flex flex-wrap w-full justify-center items-center gap-6">
-          <div className="h-[330px] w-[330px] md:h-[360px] md:w-[360px]  ">
-            <Doughnut data={chartData} options={chartOptions} />
-          </div>
+        <div className='flex flex-wrap w-full justify-center items-center gap-6'>
+          {data?.categoryStatistics.length > 0 && (
+            <div className='h-[330px] w-[330px] md:h-[360px] md:w-[360px]  '>
+              <Doughnut data={chartData} />
+            </div>
+          )}
 
           <TransactionForm />
         </div>
         <Cards />
       </div>
-
-
     </>
   );
 };

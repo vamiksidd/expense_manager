@@ -15,7 +15,7 @@ function App() {
 	const { loading, data, error } = useQuery(GET_AUTH_USERS);
 	if (loading) return null;
 
-	console.log(data);
+	// console.log(data);
 	return (
 		<BackgroundBeamsWithCollision>
 			<Routes>

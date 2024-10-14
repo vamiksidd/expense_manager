@@ -24,6 +24,22 @@ const transactionResolver = {
 				throw new Error("Error getting transaction");
 			}
 		},
+		categoryStatistics: async (_, __, context) => {
+			if (!context.getUser()) throw new Error("Unauthorized")
+			const userId = context.getUser()._id
+			const transactions = await Transaction.find({ userId })
+
+			const categoryMap = {}
+			transactions.forEach(transaction => {
+				if (!categoryMap[transaction.category]) {
+					categoryMap[transaction.category] = 0;
+				}
+				categoryMap[transaction.category] += transaction.amount;
+			});
+			return Object.entries(categoryMap).map(([category, totalAmount]) => ({ category, totalAmount }))
+
+
+		}
 	},
 	Mutation: {
 		createTransaction: async (_, { input }, context) => {
@@ -33,7 +49,7 @@ const transactionResolver = {
 					...input,
 					userId: context.getUser()._id,
 				});
-        if(!newTransaction.amount)throw new Error("Amout required")
+				if (!newTransaction.amount) throw new Error("Amout required")
 				await newTransaction.save();
 				return newTransaction;
 			} catch (err) {
